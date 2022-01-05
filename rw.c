@@ -70,10 +70,14 @@ void *reader(void *param) {
 		/* exit mutex */
 
 		printf("A reader from %ld reads the charactor %c.\n", pthread_self(), m->shaObj);
+		
+		pthread_mutex_lock(&m->mutex);
 		if (--m->read_count == 0) {
 			pthread_mutex_unlock(&m->rw_mutex);
 			// printf("rw_mutex has been released from readers\n");
 		}
+		pthread_mutex_unlock(&m->mutex);
+		/* mutex lock needed when altering count list */
 		
 		sleep(rand() % 5);
 	}
